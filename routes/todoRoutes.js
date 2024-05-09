@@ -5,13 +5,13 @@ import {
   getTodoById,
   updateTodo,
   deleteTodo,
-  validateTitle,
+  validate,
 } from '../handlers/todoHandlers.js';
 
 const router = express.Router();
 
-router.post('/todos', validateTitle,  createTodo);
-router.put('/todos/:id', updateTodo);
+router.post('/todos', validate, createTodo);
+router.put('/todos/:id',validate, updateTodo);
 
 router.get('/todos', getTodos);
 router.get('/todos/:id', getTodoById);

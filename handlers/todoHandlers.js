@@ -1,13 +1,13 @@
 import { todos } from './db.js';
 
-export function validateTitle(req, res, next){
-  const { title } = req.body;
-  if ( title.length >= 5){
+export function validate(req, res, next){
+  const { title, description } = req.body;
+  if ( title.length >= 5 && description != undefined ){
     next()
   } else{
     res.status(400).json({
       success: false,
-      message: "Title must be at least 5 characters long"
+      message: "Title should be 5 characters long, and description key should exist"
     });
   }
 }
