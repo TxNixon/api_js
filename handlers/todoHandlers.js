@@ -1,5 +1,17 @@
 import { todos } from './db.js';
 
+export function validateTitle(req, res, next){
+  const { title } = req.body;
+  if ( title.length >= 5){
+    next()
+  } else{
+    res.status(400).json({
+      success: false,
+      message: "Title must be at least 5 characters long"
+    });
+  }
+}
+
 export const createTodo = (req, res) => {
   const { title, description } = req.body;
   const newTodo = {
