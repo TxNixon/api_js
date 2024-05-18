@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "@ngrok/ngrok": "^1.2.0",
-    "express": "^4.19.2"
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
   },
   "name": "api-js",
   "version": "1.0.0",
@@ -17,5 +19,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
