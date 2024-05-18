@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@ngrok/ngrok": "^1.2.0",
     "express": "^4.19.2"
   },
   "name": "api-js",
