@@ -1,26 +1,30 @@
 import { todos } from './db.js';
 
-export function validate(req, res, next){
+export function validate(req, res, next) {
   const { title, description } = req.body;
   
-  if (title === ''){
-    res.status(400).json({
+  const errors = {};
+
+  if (title === undefined || title === '') {
+    errors.title = 'Cannot be an empty string';
+  } else if (title.length < 5) {
+    errors.title = 'Title must be at least 5 characters long';
+  }
+
+  if (description === undefined) {
+    errors.description = "Key doesn't exist";
+  } else if (typeof description !== "string"){
+    errors.description = "Value should be string";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return res.status(400).json({
       success: false,
-      errors :{
-        title: 'Cannot be an empty string'}
-    })
-  };
-  if (title.length < 5){
-    res.status(400).send('Title should be at least 5 characters long');
+      errors
+    });
   }
-  
-  if (description === undefined || description === ''){
-    res.status(400).send('Description is required');
-    console.log("hello world");
-  }
-  else{
-    next();
-  };
+
+  next();
 }
 
 export const createTodo = (req, res) => {
