@@ -11,7 +11,7 @@ const app = express();
 const PORT = 3030;
 
 app.use(express.json());
-app.use(cookieParser()); // Middleware to parse cookies
+app.use(cookieParser());
 app.use('/api', todoRoutes);
 app.use('/api', registerRoutes);
 app.use('/api', loginRoutes);
