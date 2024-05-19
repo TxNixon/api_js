@@ -1,4 +1,4 @@
-import { todos } from './db.js';
+import pool from './db.js';
 
 export function validate(req, res, next) {
   const { title, description } = req.body;

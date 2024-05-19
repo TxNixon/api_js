@@ -1,51 +1,36 @@
-import { users } from './db.js';
+import pool from './db.js';
 
-const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-};
-
-const isEmailExist = (email) => {
-    return users.some(user => user.email === email);
-};
-
-const generateId = () => {
-    return Date.now().toString();
-}
-export const registerUser = (req, res) => {
-    const { fullname, email, password } = req.body;
+export const registerUser = async (req, res) => {
+    const { fullname, email, password, role } = req.body;
     const errors = {};
 
-    
+    // Validation and error handling
     if (!fullname || fullname.trim() === '') {
         errors.fullname = "Full name is required";
     }
-
     if (!email || email.trim() === '') {
         errors.email = "Email is required";
-    } else if (!validateEmail(email)) {
-        errors.email = "Email is not valid";
-    } else if (isEmailExist(email)) {
-        errors.email = "Email already exists";
+    } else {
+        const [existingUser] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (existingUser.length > 0) {
+            errors.email = "Email already exists";
+        }
     }
-
-    
     if (!password || password.trim() === '') {
         errors.password = "Password is required";
     }
+    if (!role || role.trim() === '') {
+        errors.role = "Role is required";
+    }
 
+    // If there are errors, return 400 with error messages
     if (Object.keys(errors).length > 0) {
-        console.log('Validation errors:', errors);
         return res.status(400).json({ success: false, errors });
     }
 
-    const newUser = { 
-        id: generateId(),
-        fullname,
-        email,
-        password 
-    };
-    users.push(newUser);
+    // Insert new user into the database
+    await pool.query('INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, ?)', [fullname, email, password, role]);
+    const [newUser] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
-    return res.status(201).json({ success: true, user: newUser });
+    return res.status(201).json({ success: true, user: newUser[0] });
 };
